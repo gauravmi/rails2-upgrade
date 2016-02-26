@@ -1,0 +1,28 @@
+
+controllers:
+  depricated: []
+
+models:
+  depricated: []
+
+views:
+  depricated:
+    - 'link_to_remote'
+    - 'form_remote_tag'
+    - 'remote_form_for'
+    - 'form_remote_for'
+    - 'div_for'
+    # - 'form_for'
+    # - 'link_to'
+    - '<% .*content_tag.* do.*%>'
+    - '<% .*javascript_tag.* do.*%>'
+    - '<% .*form_for.* do.*%>'
+    - '<% .*form_tag.* do.*%>'
+    - '<% .*fields_for.* do.*%>'
+    - '<% .*field_set_tag.* do.*%>'
+
+alternatives:
+#  add the pattern before hyphen to identify correct alternative (ex: pattern - link )
+  - 'link_to_remote - http://stackoverflow.com/questions/5511787/rails-2-to-rails-3-using-link-to-instead-of-link-to-remote-including-remote-a'
+  - "form_remote_tag - http://blog.markusproject.org/?p=3336"
+  - "remote_form_for - http://stackoverflow.com/questions/3890315/rails-3-undefined-method-remote-form-for"

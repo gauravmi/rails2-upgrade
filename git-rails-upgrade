@@ -1,0 +1,63 @@
+#!/usr/bin/ruby
+
+#  this script should be removed after the rails is upgraded.
+
+require 'rubygems'
+require 'git'
+require 'yaml'
+require 'colored'
+require 'open3'
+
+execute  = Proc.new {|command| Open3.popen3(command) { |stdin, stdout, stderr| stdout.read } }
+
+WORKING_DIR 	= 	Dir.pwd
+PROFILE	 			= 	File.expand_path('~') + '/.bash_profile'
+EXPORT_PATH 	= 	"\n export PATH=$PATH:#{WORKING_DIR} \n"
+CONFIG 				= 	YAML.load_file('rails-upgrade.yml')
+
+# setting up environment
+File.open(PROFILE, "a"){|f| f.write EXPORT_PATH } if execute.call("grep mingle_ericsson ~/.bash_profile").empty?
+system "git config --global alias.st rails-upgrade" # git st
+# function git(){ if [[ $@ == "status"	]]; then command git rails-upgrade; else command git $@; fi; } put this in bash_profile to change git status command :)
+
+# git configuration
+Git.configure do |config|
+	config.binary_path = '/usr/bin/git'
+end
+g = Git.open(WORKING_DIR)
+
+# so we dont need to run git status separately.
+system 'git status'
+puts "\n\n"
+
+
+changed_files 					= g.diff.stats[:files].keys
+views_deprication 			= CONFIG["views"]["depricated"]
+controller_deprication 	= CONFIG["controllers"]["depricated"]
+model_deprication				= CONFIG["models"]["depricated"]
+depricated_content 			= views_deprication + controller_deprication + model_deprication
+alternatives 						= CONFIG["alternatives"]
+
+message = String.new
+
+changed_files.each do |file|
+	rhtml = File.extname(file) == ".rhtml"
+	message << "\n #{"Depricated RHTML ext found :".yellow} #{file.red} => #{file.gsub(".rhtml", ".erb").green}\n\n " if rhtml
+
+	depricated_content.each do |content|
+		command = "grep \"#{content}\" #{file}"
+		result = execute.call(command).strip.gsub("\n", "\n\t")
+
+		unless result.empty?
+			message.concat(file.yellow + " => \n\t " + result.strip.red + "\n")
+			alternative = alternatives.find { |alt| alt.include?(content) }
+			message.concat("\t possible alternative : \n".green)
+			message.concat("\t\t " + alternative.green + "\n")
+		end
+	end
+end
+
+if message
+	puts "following files has a depricated rails 2 code.. \n".blue.underline.bold
+	puts message
+end
