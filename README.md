@@ -1,3 +1,4 @@
+
 # rails2-upgrade
 
 ## Preparing your app for rails 3 upgrade
@@ -9,6 +10,8 @@
 The plugin uses the **rals-upgrade.yml** file to record all the depricated patterns in rails2.
 
 rails-upgrade.yml :
+
+
 	depricated : 
 		this section is a list of patterns which are depricated for views/models/controllers.
 
@@ -17,10 +20,11 @@ rails-upgrade.yml :
 
 
 usage :
+
 first time usage : ruby git-rails-upgrade
 				   This will create an git alias for "git st"
 
-later usage : git st
+later usage : **git st**
 
 it should output something similar
 
