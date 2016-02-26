@@ -1,13 +1,15 @@
 
 # rails2-upgrade
 
-## Preparing your app for rails 3 upgrade
+##### Preparing your app for rails 3 upgrade
 
 
 ######  This plugin is will bind the script to **git status/ git st** command, so whenever you make changes to the source code git st will also display the depicated content and possible alternative solutions to make changes on the files that are changed.
 
 
 The plugin uses the **rals-upgrade.yml** file to record all the depricated patterns in rails2.
+
+copy the files to your source code and add it to your path.
 
 rails-upgrade.yml :
 
